@@ -1,0 +1,24 @@
+class Solution {
+public:
+vector<string> solvebyrec(string s, vector<string>& wordDict, int i) {
+    if (i == s.size()) return {""};
+    vector<string> temp;
+    for (int j = i; j < s.size(); j++) {
+        if (find(wordDict.begin(), wordDict.end(), s.substr(i, j - i + 1)) != wordDict.end()) {
+            vector<string> nextWords = solvebyrec(s, wordDict, j + 1);
+            for (auto it : nextWords) {
+                if (!it.empty()) {
+                    temp.push_back(s.substr(i, j - i + 1) + " " + it);
+                } else {
+                    temp.push_back(s.substr(i, j - i + 1));
+                }
+            }
+        }
+    }
+    return temp;
+}
+
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+       return solvebyrec(s,wordDict,0);
+    }
+};
