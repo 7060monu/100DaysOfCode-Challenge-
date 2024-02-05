@@ -1,0 +1,17 @@
+class Solution {
+public:
+bool solvebyrec(vector<int>& piles, int i, int j) {
+    if (i > j) return true;
+
+    int sum1 = piles[i] + solvebyrec(piles, i + 1, j);
+    int sum2 = (i + 1 >= j - 1) ? piles[j] + solvebyrec(piles, i, j - 1) : 0;
+
+    return sum1 > sum2;
+}
+
+bool stoneGame(vector<int>& piles) {
+    return solvebyrec(piles, 0, piles.size() - 1);
+}
+
+
+};
