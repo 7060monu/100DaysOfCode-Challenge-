@@ -1,0 +1,50 @@
+class Solution {
+public:
+  
+
+    // int solvebyrec(vector<string>& strs, int m, int n, int i) {
+    //     if(m == 0 && n == 0) return 0;
+    //     if(i == strs.size()) return 0;
+
+    //     int zeros = count(strs[i].begin(), strs[i].end(), '0');
+    //     int ones = strs[i].size() - zeros;
+        
+    //     int include = 0, exclude = 0;
+    //     if(zeros <= m && ones <= n) {
+    //         include = 1 + solvebyrec(strs, m - zeros, n - ones, i + 1);
+    //     }
+        
+    //     exclude = solvebyrec(strs, m, n, i + 1);
+        
+    //     return max(include, exclude);
+    // }
+
+    // int findMaxForm(vector<string>& strs, int m, int n) {
+    //     return solvebyrec(strs, m, n, 0);
+    // }
+    int solvebyrec(vector<string>& strs, int m, int n, int i, vector<vector<vector<int>>>& memo) {
+        if (m == 0 && n == 0) return 0;
+        if (i == strs.size()) return 0;
+        
+        if (memo[m][n][i] != -1) return memo[m][n][i];
+
+        int zeros = count(strs[i].begin(), strs[i].end(), '0');
+        int ones = strs[i].size() - zeros;
+        
+        int include = 0, exclude = 0;
+        if (zeros <= m && ones <= n) {
+            include = 1 + solvebyrec(strs, m - zeros, n - ones, i + 1, memo);
+        }
+        
+        exclude = solvebyrec(strs, m, n, i + 1, memo);
+        
+        memo[m][n][i] = max(include, exclude);
+        
+        return memo[m][n][i];
+    }
+
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        vector<vector<vector<int>>> memo(m + 1, vector<vector<int>>(n + 1, vector<int>(strs.size(), -1)));
+        return solvebyrec(strs, m, n, 0, memo);
+    }
+};
