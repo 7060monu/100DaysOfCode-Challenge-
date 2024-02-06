@@ -1,0 +1,18 @@
+class Solution {
+public:
+int solvebyrec(vector<int>& nums, int i, int j) {
+    if (i > j) return 0;
+
+    int result;
+    result = nums[i] - solvebyrec(nums, i + 1, j);
+    result = max(result, nums[j] - solvebyrec(nums, i, j - 1));
+    return result;
+}
+
+bool predictTheWinner(vector<int>& nums) {
+    int n = nums.size();
+    int diff = solvebyrec(nums, 0, n - 1);
+    return diff >= 0;
+}
+
+};
