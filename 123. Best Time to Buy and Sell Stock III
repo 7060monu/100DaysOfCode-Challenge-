@@ -1,0 +1,34 @@
+int solveByRec(vector<int>& prices, int i, int transactions_left, bool can_buy, vector<vector<vector<int>>>& memo) {
+        if (i >= prices.size() || transactions_left == 0) // Base case
+            return 0;
+
+        if (memo[i][transactions_left][can_buy] != -1) // If already computed
+            return memo[i][transactions_left][can_buy];
+
+        int profit = 0;
+
+        if (can_buy) {
+            // If we can buy, we can either buy or skip
+            int buy = -prices[i] + solveByRec(prices, i + 1, transactions_left, false, memo);
+            int skip = solveByRec(prices, i + 1, transactions_left, true, memo);
+            profit = max(buy, skip);
+        } else {
+            // If we can't buy, we can either sell or skip
+            int sell = prices[i] + solveByRec(prices, i + 1, transactions_left - 1, true, memo);
+            int skip = solveByRec(prices, i + 1, transactions_left, false, memo);
+            profit = max(sell, skip);
+        }
+
+        memo[i][transactions_left][can_buy] = profit; // Memoize the result
+        return profit;
+    }
+
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        if (n == 0) return 0;
+
+        int max_transactions = 2; // Maximum transactions allowed
+        vector<vector<vector<int>>> memo(n, vector<vector<int>>(max_transactions + 1, vector<int>(2, -1))); // Memoization table
+
+        return solveByRec(prices, 0, max_transactions, true, memo);
+    }
