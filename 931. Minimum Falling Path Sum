@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int res(vector<vector<int>>& matrix, int row, int col, vector<vector<int>>& dp) {
+        if (dp[row][col] != -5) return dp[row][col];
+        if (row == 0) return dp[row][col] = matrix[0][col];
+        
+        int upright = 99999, upleft = 99999;
+        if (col < matrix[0].size() - 1) {
+            upright = matrix[row][col] + res(matrix, row - 1, col + 1, dp);
+        }
+        int up = matrix[row][col] + res(matrix, row - 1, col, dp);
+        if (col > 0) {
+            upleft = matrix[row][col] + res(matrix, row - 1, col - 1, dp);
+        }
+        return dp[row][col] = min(up, min(upright, upleft));
+    }
+
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int row = matrix.size();
+        int col = matrix[0].size();
+        vector<vector<int>> dp(row, vector<int>(col, -5));
+        
+        int mini = INT_MAX;
+        for (int i = 0; i < col; i++) {
+            int v = res(matrix, row - 1, i, dp);
+            mini = min(mini, v);
+        }
+        
+        return mini;
+    }
+};
