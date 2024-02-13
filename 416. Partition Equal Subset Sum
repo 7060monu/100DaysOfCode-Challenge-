@@ -1,0 +1,33 @@
+class Solution {
+public:
+bool solvebyrec(vector<int>&nums,int k,int n,vector<vector<int>>&dp){
+    if(k==0) return true;
+    if(n<0||k<0) return false;
+    if(dp[n][k]!=-1){
+        return dp[n][k];
+    }
+
+    bool include = false;
+    bool exclude = false;
+    if(k>=nums[n]){
+        include = solvebyrec(nums,k-nums[n],n-1,dp);
+        // exclude = solvebyrec(nums,k,n-1,dp);
+    }
+    exclude = solvebyrec(nums,k,n-1,dp);   
+    return dp[n][k] = include||exclude;
+}
+    bool canPartition(vector<int>& nums) {
+    int sum = 0;
+    for(int i = 0; i < nums.size(); i++) {
+        sum += nums[i];
+    }
+    if (sum % 2 != 0) 
+        return false;
+    
+    int k = sum / 2;
+    int n = nums.size();
+    vector<vector<int>>dp(n+1,vector<int>(k+1,-1));
+    return solvebyrec(nums, k, n-1,dp);
+}
+
+};
