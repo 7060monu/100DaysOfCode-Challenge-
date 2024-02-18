@@ -1,0 +1,22 @@
+
+  int solveMem(int index, vector<int> weight, vector<int> value, int maxWeight,vector<vector<int>>& dp ) {
+    if(index == 0 ) {
+        if(maxWeight >= weight[index]) return value[index];
+        else return 0;
+
+    }
+    if(dp[index][maxWeight] !=-1) return dp[index][maxWeight];
+    int include = 0;
+    if(weight[index] <= maxWeight) {
+        include += value[index] + solveMem(index-1, weight, value, maxWeight - weight[index], dp);
+
+    }
+    int exclude = solveMem(index -1, weight, value, maxWeight, dp);
+    return dp[index][maxWeight] = max(include, exclude);
+
+}
+
+int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight){
+	 vector<vector<int>> dp(n+1, vector<int>(maxWeight+1, -1)); 
+	return solveMem(n-1, weight, value, maxWeight, dp);
+} 
