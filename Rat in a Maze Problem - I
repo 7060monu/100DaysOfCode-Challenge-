@@ -1,0 +1,28 @@
+void solve(vector<vector<int>>& m, int n, vector<string>& ans, vector<vector<bool>>& visited, int i, int j, string temp) {
+    if (i < 0 || j < 0 || i >= n || j >= n || visited[i][j] || m[i][j] == 0) {
+        return;
+    }
+
+    if (i == n - 1 && j == n - 1) {
+        ans.push_back(temp);
+        return;
+    }
+
+    visited[i][j] = true;
+
+    solve(m, n, ans, visited, i, j + 1, temp + 'R');
+    solve(m, n, ans, visited, i, j - 1, temp + 'L');
+    solve(m, n, ans, visited, i - 1, j, temp + 'U');
+    solve(m, n, ans, visited, i + 1, j, temp + 'D');
+
+    visited[i][j] = false;
+}
+
+vector<string> findPath(vector<vector<int>>& m, int n) {
+    vector<string> ans;
+    vector<vector<bool>> visited(n, vector<bool>(n, false));
+    string temp;
+    solve(m, n, ans, visited, 0, 0, temp);
+    return ans;
+}
+
