@@ -1,0 +1,50 @@
+#include <vector>
+#include <string>
+#include <map>
+
+using namespace std;
+
+class Solution {
+public:
+    void addsol(vector<vector<string>>& ans, vector<vector<string>>& mat, int n) {
+        vector<string> temp;
+        for(int i = 0; i < n; i++) {
+            string row = "";
+            for(int j = 0; j < n; j++) {
+                row += mat[i][j];
+            }
+            temp.push_back(row);
+        }
+        ans.push_back(temp);
+    }
+
+    void solvebyrec(int n, vector<vector<string>>& mat, int col, vector<vector<string>>& ans, map<int,bool>& rowMap, map<int,bool>& diag1Map, map<int,bool>& diag2Map) {
+        if(col == n) {
+            addsol(ans, mat, n);
+            return;
+        }
+        for(int i = 0; i < n; i++) {
+            if(rowMap[i] || diag1Map[i + col] || diag2Map[col - i + n - 1])
+                continue;
+            rowMap[i] = true;
+            diag1Map[i + col] = true;
+            diag2Map[col - i + n - 1] = true;
+            mat[i][col] = "Q";
+            solvebyrec(n, mat, col + 1, ans, rowMap, diag1Map, diag2Map);
+            rowMap[i] = false;
+            diag1Map[i + col] = false;
+            diag2Map[col - i + n - 1] = false;
+            mat[i][col] = ".";
+        }
+    }
+
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> mat(n, vector<string>(n, "."));
+        vector<vector<string>> ans;
+        map<int, bool> rowMap;
+        map<int, bool> diag1Map;
+        map<int, bool> diag2Map;
+        solvebyrec(n, mat, 0, ans, rowMap, diag1Map, diag2Map);
+        return ans;
+    }
+};
