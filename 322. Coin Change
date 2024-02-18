@@ -1,0 +1,27 @@
+
+class Solution {
+public:
+    int solveByRec(vector<int>& coins, int amount, int n,vector<int>&dp) {
+        if (amount == 0) return 0;
+        if (n == 0) return INT_MAX;
+        if(dp[amount]!=-1) return dp[amount];
+
+        int mini = INT_MAX;
+
+        for (int i = n - 1; i >= 0; i--) { 
+            if (amount >= coins[i]) {
+                int res = solveByRec(coins, amount - coins[i], n,dp);
+                if (res != INT_MAX) {
+                    mini = min(mini, res + 1);
+                }
+            }
+        }
+        return dp[amount] = mini;
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        vector<int>dp(amount+1,-1);
+        int result = solveByRec(coins, amount, n,dp);
+        return result == INT_MAX ? -1 : result;
+    }
+};
