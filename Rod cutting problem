@@ -1,0 +1,21 @@
+vector<int> dp;
+int cutRodHelper(vector<int>& prices, int n) {
+    if (n <= 0)
+        return 0;
+    
+    if (dp[n] != -1) {
+        return dp[n];
+    }
+    
+    int max_val = INT_MIN;
+    for (int i = 1; i <= n; i++) {
+        max_val = max(max_val, prices[i - 1] + cutRodHelper(prices, n - i));
+    }
+    
+    return dp[n] = max_val;
+}
+
+int cutRod(vector<int>& prices, int n) {
+    dp.assign(n + 1, -1); 
+    return cutRodHelper(prices, n);
+}
